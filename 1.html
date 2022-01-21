@@ -1,0 +1,90 @@
+// ==UserScript==
+// @name         Speed Control
+// @namespace    http://tampermonkey.net/
+// @version      0.1
+// @description  try to take over the world!
+// @author       You
+// @match        *://*/*
+// @icon         data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==
+// @grant        none
+// ==/UserScript==
+
+(function() {
+    'use strict';
+
+    // Your code here...
+    let btn=document.createElement("Div");
+    let current_speed = document.querySelector("video").playbackRate;
+
+    let speed_ele = document.createElement('p');
+    let label_content = "Speed:" + current_speed + "X";
+    let speed_content=document.createTextNode(label_content);
+    speed_ele.appendChild(speed_content);
+    speed_ele.id = "speed_controller";
+    btn.appendChild(speed_ele);
+
+    let right_ele = document.createElement('p');
+    let right_content=document.createTextNode(">");
+    right_ele.appendChild(right_content);
+    right_ele.id = "right";
+    right_ele.style.textAlign = "center";
+    right_ele.style.border = '1px solid';
+    btn.appendChild(right_ele);
+
+    let left_ele = document.createElement('p');
+    let left_content=document.createTextNode("<");
+    left_ele.appendChild(left_content);
+    left_ele.id = "left";
+    left_ele.style.textAlign = "center";
+    left_ele.style.border = '1px solid';
+    btn.appendChild(left_ele);
+
+    btn.style.border = '1px solid';
+    btn.style.position = 'fixed';
+    btn.style.top = '50px';
+    btn.style.right = 0;
+    btn.style.font = "arial";
+    btn.style.color = 'green';
+    btn.style.zIndex = 99;
+    document.body.appendChild(btn);
+
+    // 控制速度------------------------------------------------------------------
+    document.getElementById("speed_controller").addEventListener("click", function(){
+        current_speed = document.querySelector("video").playbackRate;
+        if (current_speed>=4){
+            speed_control(1);
+        }else{
+            speed_control(current_speed+0.5);
+        }
+    });
+
+    function speed_control(speed) {
+        document.querySelector("video").playbackRate = speed;
+        current_speed = document.querySelector("video").playbackRate;
+        //alert(current_speed);
+        label_content = "Speed:" + current_speed + "X";
+        document.getElementById("speed_controller").innerHTML = label_content;
+    };
+
+    // 快進----------------------------------------------------------------------
+    document.getElementById("right").addEventListener("click", function(){
+        right();
+    });
+
+    function right(){
+        let time = document.querySelector("video").currentTime;
+        document.querySelector("video").currentTime = time + 10;
+    };
+
+
+    // 快退----------------------------------------------------------------------
+    document.getElementById("left").addEventListener("click", function(){
+        left();
+    });
+
+    function left(){
+        let time = document.querySelector("video").currentTime;
+        document.querySelector("video").currentTime = time - 10;
+    };
+
+})();
